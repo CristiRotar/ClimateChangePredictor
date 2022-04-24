@@ -1,5 +1,6 @@
 import csv
 import os
+import matplotlib.pyplot as plt
 
 import numpy as np
 
@@ -66,7 +67,6 @@ def splitData(inputs, outputs):
 
     return trainInputs, trainOutputs, validationInputs, validationOutputs
 
-
 if __name__ == '__main__':
     crtDir = os.getcwd()
     filePath = os.path.join(crtDir, 'data', 'FAOSTAT_data_1-10-2022.csv')
@@ -81,11 +81,13 @@ if __name__ == '__main__':
         if input[0] in areaClassification.keys():
             input[0] = areaClassification[input[0]]
         else:
+            areaClassification[input[0]] = areaIndex
             input[0] = areaIndex
             areaIndex += 1
         if input[1] in monthClassification.keys():
             input[1] = monthClassification[input[1]]
         else:
+            monthClassification[input[1]] = monthIndex
             input[1] = monthIndex
             monthIndex += 1
         input[2] = int(input[2])
@@ -99,3 +101,12 @@ if __name__ == '__main__':
     w0, w1, w2, w3 = toolReg.fit()
     computedValidationOutputs = toolReg.predict()
     err = toolReg.error()
+
+    inp = [input[2] for input in validationInputs if input[0] == 0]
+    out = [validationOutputs[i] for i in range(len(inp))]
+    outc = [computedValidationOutputs[i] for i in range(len(inp))]
+    plt.scatter(inp, out, color='r')
+    plt.plot(inp, outc, color='b')
+    plt.xlabel('Year')
+    plt.ylabel('Prediction')
+    plt.show()
