@@ -4,7 +4,9 @@ import matplotlib.pyplot as plt
 
 import numpy as np
 
-from ToolRegression import ToolRegression
+from LinearRegressor import LinearRegressor
+from SGDRegressor import SGDRegressor
+from Scaler import normalisation
 
 
 def loadData(fileName, inputVariabName1, inputVariabName2, inputVariabName3, outputVariabName):
@@ -97,10 +99,11 @@ if __name__ == '__main__':
     x3 = [inputs[i][2] for i in range(len(inputs))]
 
     trainInputs, trainOutputs, validationInputs, validationOutputs = splitData(inputs, outputs)
-    toolReg = ToolRegression(trainInputs, trainOutputs, validationInputs, validationOutputs)
-    w0, w1, w2, w3 = toolReg.fit()
-    computedValidationOutputs = toolReg.predict()
-    err = toolReg.error()
+
+    linearRegressor = LinearRegressor(trainInputs, trainOutputs, validationInputs, validationOutputs)
+    w0, w1, w2, w3 = linearRegressor.fit()
+    computedValidationOutputs = linearRegressor.predict()
+    err = linearRegressor.error()
 
     inp = [input[2] for input in validationInputs if input[0] == 0]
     out = [validationOutputs[i] for i in range(len(inp))]
@@ -110,3 +113,12 @@ if __name__ == '__main__':
     plt.xlabel('Year')
     plt.ylabel('Prediction')
     plt.show()
+
+    print()
+
+    trainInputs, validationInputs = normalisation(trainInputs, validationInputs)
+
+    sgdRegressor = SGDRegressor(trainInputs, trainOutputs, validationInputs, validationOutputs)
+    w0_, w1_, w2_, w3_ = sgdRegressor.fit()
+    computedValidationOutputs_ = sgdRegressor.validate()
+    err_ = sgdRegressor.error()
