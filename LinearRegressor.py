@@ -1,5 +1,5 @@
 from sklearn import linear_model
-from sklearn.metrics import mean_squared_error
+from sklearn.metrics import mean_squared_error, r2_score
 
 
 class LinearRegressor():
@@ -25,4 +25,8 @@ class LinearRegressor():
     def error(self):
         error = mean_squared_error(self._validationOutputs, self._computedValidationOutputs)
         print("Error: ", error)
-        return error
+
+        r2_sc = r2_score(self._validationOutputs, self._computedValidationOutputs)
+        print("R2 score: ", r2_sc)
+
+        return error, r2_sc
