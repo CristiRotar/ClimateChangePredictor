@@ -7,6 +7,7 @@ import numpy as np
 from LinearRegressor import LinearRegressor
 from SGDRegressor import SGDRegressor
 from Scaler import normalisation
+from sklearn.model_selection import train_test_split
 
 
 def loadData(fileName, inputVariabName1, inputVariabName2, inputVariabName3, outputVariabName):
@@ -98,7 +99,8 @@ if __name__ == '__main__':
     x2 = [inputs[i][1] for i in range(len(inputs))]
     x3 = [inputs[i][2] for i in range(len(inputs))]
 
-    trainInputs, trainOutputs, validationInputs, validationOutputs = splitData(inputs, outputs)
+    # trainInputs, trainOutputs, validationInputs, validationOutputs = splitData(inputs, outputs)
+    trainInputs, validationInputs, trainOutputs, validationOutputs = train_test_split(inputs, outputs, train_size=0.8, random_state=42)
 
     linearRegressor = LinearRegressor(trainInputs, trainOutputs, validationInputs, validationOutputs)
     w0, w1, w2, w3 = linearRegressor.fit()
@@ -126,7 +128,7 @@ if __name__ == '__main__':
     inp = [input[2] for input in validationInputsNenormalized if input[0] == 0]
     out = [validationOutputs[i] for i in range(len(inp))]
     outc = [computedValidationOutputs_[i] for i in range(len(inp))]
-    print(outc)
+    # print(outc)
     plt.scatter(inp, out, color='r')
     plt.scatter(inp, outc, color='b')
     plt.xlabel('Year')
