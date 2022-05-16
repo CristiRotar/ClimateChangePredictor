@@ -115,10 +115,21 @@ if __name__ == '__main__':
     plt.show()
 
     print()
-
+    validationInputsNenormalized = validationInputs
     trainInputs, validationInputs = normalisation(trainInputs, validationInputs)
 
     sgdRegressor = SGDRegressor(trainInputs, trainOutputs, validationInputs, validationOutputs)
     w0_, w1_, w2_, w3_ = sgdRegressor.fit()
     computedValidationOutputs_ = sgdRegressor.validate()
     err_ = sgdRegressor.error()
+
+    inp = [input[2] for input in validationInputsNenormalized if input[0] == 0]
+    out = [validationOutputs[i] for i in range(len(inp))]
+    outc = [computedValidationOutputs_[i] for i in range(len(inp))]
+    print(outc)
+    plt.scatter(inp, out, color='r')
+    plt.scatter(inp, outc, color='b')
+    plt.xlabel('Year')
+    plt.ylabel('Prediction')
+    plt.show()
+
